@@ -24,9 +24,12 @@ if (isset($_GET['id'])) {
     <?php include 'header.php'; ?>
 
     <div class="container mt-5">
-        <div class="row bg-white p-4 rounded shadow-sm border mx-auto" style="max-width: 900px;">
+        <div class="row bg-white p-4 rounded shadow-sm border mx-auto align-items-center" style="max-width: 900px;">
             <div class="col-md-6 text-center">
-                <img src="<?php echo $product['image_url']; ?>" class="img-fluid rounded border shadow-sm" alt="Product Image">
+                <img src="<?php echo $product['image_url']; ?>" 
+                     class="img-fluid rounded border shadow-sm" 
+                     alt="Product Image"
+                     style="width: 100%; height: 400px; object-fit: cover;">
             </div>
             <div class="col-md-6">
                 <span class="badge bg-success mb-2"><?php echo $product['cat_name']; ?></span>
@@ -45,5 +48,6 @@ if (isset($_GET['id'])) {
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

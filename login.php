@@ -12,11 +12,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (mysqli_num_rows($result) == 1) {
         $user = mysqli_fetch_assoc($result);
-        // Simple password check (consider password_verify for production)
+        
+        // Simple password check
         if ($password === $user['password']) {
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['user_name'] = $user['name'];
-            $_SESSION['role'] = $user['role'];
+            
+            // CRITICAL: This line allows the Admin Dashboard button to show up
+            $_SESSION['role'] = $user['role']; 
+            
             header("Location: index.php");
             exit();
         } else {
@@ -57,11 +61,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm">SIGN IN</button>
             </form>
+            
             <p class="mt-4 text-center small text-muted">
                 New to MyFoodMart? <a href="register.php" class="text-success fw-bold">Create an account</a>
             </p>
         </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
