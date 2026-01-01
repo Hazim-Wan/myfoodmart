@@ -7,7 +7,6 @@ A professional, web-based e-commerce platform designed for convenient campus mea
 ## ✨ Key Features
 * **Smart Search:** Quickly find local favorites like Laksa Sarawak and Mee Kolok.
 * **Responsive UI:** Modern design using the **Poppins** font and a dark charcoal navbar for a premium feel.
-* **B2C Hero Section:** High-readability summary highlighting the platform's focus on connecting campus users with diverse food vendors.
 * **Standardized Menu:** Automatic image scaling to perfect squares using `object-fit: cover` for a clean, consistent grid layout.
 * **Secure Auth:** Role-based access control (RBAC) ensuring only authorized admins can access management tools.
 
