@@ -9,7 +9,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
 $message = "";
 
-// Logic to Add a Category [cite: 403, 407]
+// Logic to Add a Category 
 if (isset($_POST['add_category'])) {
     $cat_name = mysqli_real_escape_string($conn, $_POST['cat_name']);
     $cat_desc = mysqli_real_escape_string($conn, $_POST['cat_desc']);
@@ -20,7 +20,7 @@ if (isset($_POST['add_category'])) {
     }
 }
 
-// Logic to Delete a Category [cite: 403]
+// Logic to Delete a Category 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     mysqli_query($conn, "DELETE FROM categories WHERE category_id = $id");
@@ -28,7 +28,7 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-// Fetch all categories [cite: 409]
+// Fetch all categories 
 $categories = mysqli_query($conn, "SELECT * FROM categories ORDER BY name ASC");
 ?>
 

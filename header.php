@@ -34,15 +34,18 @@
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
                         <li class="nav-item me-2">
-                            <a class="btn btn-warning btn-sm fw-bold text-dark shadow-sm" href="admin_dashboard.php">⚙️ Dashboard</a>
+                            <a class="btn btn-warning btn-sm fw-bold text-dark shadow-sm" href="admin_dashboard.php">⚙️ Products</a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="btn btn-info btn-sm fw-bold text-dark shadow-sm" href="admin_orders.php">📋 Orders</a>
                         </li>
                     <?php endif; ?>
 
-                    <li class="nav-item"><a class="nav-link text-white" href="order_history.php">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="order_history.php">My Orders</a></li>
                     <li class="nav-item"><a class="btn btn-outline-light btn-sm ms-2 fw-bold" href="logout.php">Logout</a></li>
                 <?php else: ?>
                     <li class="nav-item"><a class="nav-link text-white" href="login.php">Login</a></li>
-                    <li class="nav-item"><a class="btn btn-success btn-sm ms-2 fw-bold" href="register.php">Sign Up</a></li>
+                    <li class="nav-item"><a class="btn btn-success btn-sm ms-2 fw-bold shadow-sm" href="register.php">Sign Up</a></li>
                 <?php endif; ?>
             </ul>
         </div>
