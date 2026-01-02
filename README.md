@@ -15,19 +15,11 @@ A professional, web-based e-commerce platform designed for convenient campus mea
 * **Backend:** PHP (Session-based authentication & role management).
 * **Database:** MySQL (Relational schema with `users`, `products`, `categories`, and `orders`).
 
-<<<<<<< HEAD
-## 🚀 Installation
-1. **Clone** this repository into your `xampp/htdocs/` folder.
-2. **Export** your local database as `myfoodmart.sql` using phpMyAdmin.
-3. **Import** `myfoodmart.sql` into your local MySQL server.
-4. **Open** `localhost/myfoodmart` in your browser.
-=======
 ## 🚀 Installation & Setup
 1.  **Clone** this repository to your local server (e.g., `xampp/htdocs/myfoodmart`).
 2.  **Database**: Create a MySQL database and import the `myfoodmart.sql` file.
 3.  **Config**: Update database credentials in `Root/db_connect.php`.
-4.  **Run**: Access the project at `localhost/myfoodmart/Section 2/index.php`.
->>>>>>> 93e604a (Refactor: Modularized code and added clear documentation for rubric compliance)
+4.  **Run**: Access the project at `localhost/myfoodmart/Section 2/index.php
 
 ## ⚙️ Admin Management
 The administrative suite is accessible only to users with the **admin** role.
