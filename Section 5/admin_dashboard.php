@@ -54,7 +54,6 @@ $result = mysqli_query($conn, $query);
             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                 <h2 class="fw-bold text-dark mb-0">📦 Product Management</h2>
                 <div class="d-flex gap-2">
-                    <a href="manage_categories.php" class="btn btn-outline-dark fw-bold rounded-pill px-3">Manage Categories</a>
                     <a href="add_product.php" class="btn btn-success fw-bold rounded-pill px-4 shadow-sm">+ Add New Product</a>
                 </div>
             </div>

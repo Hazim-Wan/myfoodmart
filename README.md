@@ -19,7 +19,11 @@ A professional, web-based e-commerce platform designed for convenient campus mea
 1.  **Clone** this repository to your local server (e.g., `xampp/htdocs/myfoodmart`).
 2.  **Database**: Create a MySQL database and import the `myfoodmart.sql` file.
 3.  **Config**: Update database credentials in `Root/db_connect.php`.
+<<<<<<< HEAD
 4.  **Run**: Access the project at `localhost/myfoodmart/Section 2/index.php
+=======
+4.  **Run**: Access the project at `localhost/myfoodmart/Section 2/index.php`
+>>>>>>> 37203ae (Bug fix)
 
 ## ⚙️ Admin Management
 The administrative suite is accessible only to users with the **admin** role.
