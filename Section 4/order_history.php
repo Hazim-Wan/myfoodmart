@@ -1,7 +1,7 @@
 <?php
 //  User Order History Module - order_history.php
 //  Displays a historical log of all transactions made by the authenticated user.
-//  Features dynamic status color-coding and responsive table layouts.
+//  Features dynamic status color-coding and secure cancellation triggers.
 
 session_start();
 
@@ -11,7 +11,6 @@ include_once BASE_PATH . 'db_connect.php';
 
 //  AUTHENTICATION GUARD:
 //  Ensures only logged-in users can access their transaction history.
-//  Redirects guests to the login module in Section 1 using BASE_URL.
 if (!isset($_SESSION['user_id'])) { 
     header("Location: " . BASE_URL . "../Section 1/login.php"); 
     exit(); 
@@ -56,6 +55,25 @@ $result = mysqli_query($conn, $query);
             <h2 class="fw-bold text-dark mb-0">Your Order History</h2>
         </div>
 
+        <?php 
+        //  CANCELLATION FEEDBACK SYSTEM:
+        //    Interprets GET parameters from cancel_order.php to provide real-time 
+        //    notifications regarding the success or failure of a cancellation request.
+        
+        if(isset($_GET['cancel'])): ?>
+            <?php if($_GET['cancel'] == 'success'): ?>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+                    <strong>Success!</strong> Your order has been cancelled.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php elseif($_GET['cancel'] == 'error'): ?>
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+                    <strong>Error!</strong> Could not cancel order. Please contact support.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <?php if (mysqli_num_rows($result) > 0): ?>
             <div class="order-container shadow-sm">
                 <div class="table-responsive">
@@ -87,10 +105,27 @@ $result = mysqli_query($conn, $query);
                                     </span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="order_details.php?id=<?php echo $row['order_id']; ?>" 
-                                       class="btn btn-sm btn-light fw-bold border shadow-sm">
-                                        View Details
-                                    </a>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="order_details.php?id=<?php echo $row['order_id']; ?>" 
+                                           class="btn btn-sm btn-light fw-bold border shadow-sm">
+                                            View Details
+                                        </a>
+
+                                        <?php 
+                                        // SECURE TRANSACTIONAL CONTROL: 
+                                        //    1. BUSINESS LOGIC: Only displays the 'Cancel' option if the order is 'Pending'.
+                                        //    2. FORM ATTRIBUTES: Routes order_id via POST to cancel_order.php for processing.
+                                        //    3. UX SAFEGUARD: Implements a JavaScript confirmation to prevent accidental clicks.
+
+                                        if ($status == 'Pending'): ?>
+                                            <form action="cancel_order.php" method="POST" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                                                <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger fw-bold shadow-sm">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
                             <?php endwhile; ?>

@@ -20,9 +20,8 @@ $order_id = mysqli_real_escape_string($conn, $_GET['id']);
 $user_id = $_SESSION['user_id'];
 $is_admin = (isset($_SESSION['role']) && $_SESSION['role'] == 'admin');
 
-
-//  MASTER DATA RETRIEVAL:
-//  Fetches primary order info joined with customer name for administrative clarity.
+// MASTER DATA RETRIEVAL:
+// Fetches primary order info joined with customer name for administrative clarity.
 $order_query = "SELECT o.*, u.name as customer_name 
                 FROM orders o 
                 JOIN users u ON o.user_id = u.user_id 
@@ -30,16 +29,15 @@ $order_query = "SELECT o.*, u.name as customer_name
 $order_res = mysqli_query($conn, $order_query);
 $order_data = mysqli_fetch_assoc($order_res);
 
-
-//  SECURITY GUARD:
-//  Prevents unauthorized users from viewing orders that do not belong to their account.
-//  Administrators bypass this check to facilitate management.
+// SECURITY GUARD:
+// Prevents unauthorized users from viewing orders that do not belong to their account.
+// Administrators bypass this check to facilitate management.
 if (!$is_admin && $order_data['user_id'] != $user_id) { 
     die("Unauthorized access."); 
 }
 
-//  LINE ITEM RETRIEVAL:
-//  Fetches all specific products associated with this order ID.
+// LINE ITEM RETRIEVAL:
+// Fetches all specific products associated with this order ID.
 $items_query = "SELECT oi.*, p.name, p.image_url 
                 FROM order_items oi 
                 JOIN products p ON oi.product_id = p.product_id 
@@ -65,8 +63,12 @@ $items_res = mysqli_query($conn, $items_query);
     
     <div class="container mt-5 mb-5">
         <div class="mb-4">
-            <a href="order_history.php" class="btn btn-sm btn-outline-secondary px-3 rounded-pill fw-bold">
-                ← Back to Order History
+            <?php 
+            // DYNAMIC NAVIGATION: Redirects back to the appropriate dashboard based on user role.
+            $back_url = $is_admin ? "../Section 5/admin_orders.php" : "order_history.php";
+            ?>
+            <a href="<?php echo $back_url; ?>" class="btn btn-sm btn-outline-secondary px-3 rounded-pill fw-bold">
+                ← Back to <?php echo $is_admin ? 'Admin Orders' : 'Order History'; ?>
             </a>
         </div>
 
