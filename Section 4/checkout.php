@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // SESSION CLEANUP: Empty the cart after successful transaction.
         unset($_SESSION['cart']); 
-        header("Location: order_history.php?status=success");
+        header("Location: order_confirmation.php?id=" . $new_order_id);
         exit();
     }
 }

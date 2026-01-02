@@ -54,6 +54,11 @@ include_once __DIR__ . '/config.php';
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo BASE_URL; ?>../Section 4/order_history.php">My Orders</a>
                     </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-info fw-bold" href="<?php echo BASE_URL; ?>../Section 1/profile.php">👤 Profile</a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="btn btn-outline-light btn-sm ms-2" href="<?php echo BASE_URL; ?>../Section 1/logout.php">Logout</a>
                     </li>
