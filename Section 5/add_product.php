@@ -15,7 +15,7 @@ include_once BASE_PATH . 'db_connect.php';
 //  Restricts access solely to users with the 'admin' role. 
 //  Redirects unauthorized users back to the storefront.
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: " . BASE_URL . "Section 2/index.php");
+    header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 

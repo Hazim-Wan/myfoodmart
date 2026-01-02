@@ -12,7 +12,7 @@ include_once BASE_PATH . 'db_connect.php';
 //  AUTHENTICATION GUARD:
 //  Restricts access solely to administrators. Unauthorized users are rerouted to the public storefront.
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: " . BASE_URL . "Section 2/index.php");
+    header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 
