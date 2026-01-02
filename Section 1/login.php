@@ -5,7 +5,7 @@
 
 session_start();
 
-// PATH CONFIGURATION: Navigates to the Root directory for core configuration files.
+// PATH CONFIGURATION: Navigates up one level, then into the Root directory for configuration.
 include_once __DIR__ . '/../Root/config.php'; 
 
 // DATABASE CONNECTION: Utilizes absolute path constant for reliability.
@@ -33,8 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['role'] = $user['role']; 
             
-            // REDIRECTION: Route user to the storefront using the global BASE_URL.
-            header("Location: " . BASE_URL . "Section 2/index.php");
+            header("Location: " . BASE_URL . "../Section 2/index.php");
             exit();
         } else {
             $error = "Invalid password.";

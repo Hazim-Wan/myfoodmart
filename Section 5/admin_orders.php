@@ -5,13 +5,12 @@
 
 session_start();
 
-// PATH CONFIGURATION: Navigates to the Root folder for core configuration and database connectivity.
+// PATH CONFIGURATION: Navigates up one level, then into the Root folder for core configuration.
 include_once __DIR__ . '/../Root/config.php'; 
 include_once BASE_PATH . 'db_connect.php'; 
 
 //  AUTHENTICATION GUARD:
-//  Restricts access solely to administrators. Unauthorized users are 
-//  rerouted to the public storefront.
+//  Restricts access solely to administrators. Unauthorized users are rerouted to the public storefront.
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: " . BASE_URL . "Section 2/index.php");
     exit();
@@ -79,8 +78,6 @@ $result = mysqli_query($conn, $order_query);
                     <tbody>
                         <?php while($row = mysqli_fetch_assoc($result)): 
                             
-                            //  DYNAMIC STATUS VISUALIZATION:
-                            //  Assigns a specific border color to the status selector based on the order's state.
                             $status = $row['order_status'];
                             $borderColor = "#ffc107"; // Pending
                             if($status == "Completed") $borderColor = "#27ae60";
@@ -108,9 +105,9 @@ $result = mysqli_query($conn, $order_query);
                                 </form>
                             </td>
                             <td class="text-center pe-3">
-                                <a href="<?php echo BASE_URL; ?>Section 4/order_details.php?id=<?php echo $row['order_id']; ?>" 
+                                <a href="../Section 4/order_details.php?id=<?php echo $row['order_id']; ?>" 
                                    class="btn btn-sm btn-outline-primary fw-bold px-3 rounded-pill shadow-sm">
-                                   View Details
+                                    View Details
                                 </a>
                             </td>
                         </tr>

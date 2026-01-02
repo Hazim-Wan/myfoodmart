@@ -15,7 +15,7 @@ session_start();
 session_unset(); 
 session_destroy(); 
 
-// REDIRECTION: Route the user back to the storefront home page using BASE_URL.
-header("Location: " . BASE_URL . "Section 2/index.php"); 
+// REDIRECTION FIX: Navigate UP out of the Root folder before entering Section 2.
+header("Location: " . BASE_URL . "../Section 2/index.php"); 
 exit();
 ?>

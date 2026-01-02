@@ -6,7 +6,7 @@
 
 session_start();
 
-// PATH CONFIGURATION: Navigates to the Root folder for core configuration and database connectivity.
+// PATH CONFIGURATION: Navigates up one level, then into Root for core configuration.
 include_once __DIR__ . '/../Root/config.php'; 
 include_once BASE_PATH . 'db_connect.php'; 
 
@@ -48,10 +48,8 @@ $total_quantity = 0;
         </div>
         
         <?php 
-        
         //  CART PROCESSING:
         //  Iterates through the session array and fetches real-time product data from the database.
-         
         if (!empty($_SESSION['cart'])): ?>
             <div class="cart-container shadow-sm">
                 <div class="table-responsive">
@@ -112,10 +110,10 @@ $total_quantity = 0;
             </div>
             
             <div class="d-flex justify-content-between mt-4">
-                <a href="<?php echo BASE_URL; ?>Section 2/index.php" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
+                <a href="../Section 2/index.php" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
                     ← Continue Shopping
                 </a>
-                <a href="<?php echo BASE_URL; ?>Section 4/checkout.php" class="btn btn-success rounded-pill px-5 fw-bold shadow">
+                <a href="../Section 4/checkout.php" class="btn btn-success rounded-pill px-5 fw-bold shadow">
                     Proceed to Checkout →
                 </a>
             </div>
@@ -123,7 +121,7 @@ $total_quantity = 0;
             <div class="cart-container text-center py-5 shadow-sm">
                 <div style="font-size: 4rem;" class="mb-3">🛒</div>
                 <h3 class="text-muted mb-4">Your cart is currently empty</h3>
-                <a href="<?php echo BASE_URL; ?>Section 2/index.php" class="btn btn-success rounded-pill px-5 py-2 fw-bold shadow-sm">
+                <a href="../Section 2/index.php" class="btn btn-success rounded-pill px-5 py-2 fw-bold shadow-sm">
                     BROWSE MENU
                 </a>
             </div>

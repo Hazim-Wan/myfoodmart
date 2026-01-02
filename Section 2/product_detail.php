@@ -9,8 +9,8 @@ session_start();
 include_once __DIR__ . '/../Root/config.php'; 
 include_once BASE_PATH . 'db_connect.php'; 
 
-//  DATA RETRIEVAL LOGIC:
-//  Validates the presence of a product ID and fetches corresponding data via a SQL Join.
+// DATA RETRIEVAL LOGIC:
+// Validates the presence of a product ID and fetches corresponding data via a SQL Join.
 if (isset($_GET['id'])) {
     // SECURITY: Sanitize the GET parameter to prevent SQL Injection.
     $id = mysqli_real_escape_string($conn, $_GET['id']);
@@ -60,7 +60,7 @@ if (isset($_GET['id'])) {
                 <p class="text-muted fs-5 lh-base"><?php echo $product['description']; ?></p>
                 <h3 class="my-4 fw-bold text-success">RM <?php echo number_format($product['price'], 2); ?></h3>
                 
-                <form action="<?php echo BASE_URL; ?>Section 3/cart_action.php" method="POST" class="mt-4">
+                <form action="../Section 3/cart_action.php" method="POST" class="mt-4">
                     <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                     
                     <div class="d-flex align-items-center mb-4">
@@ -69,7 +69,7 @@ if (isset($_GET['id'])) {
                                value="1" min="1" style="max-width: 90px; height: 45px;">
                     </div>
                     
-                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-3 rounded-pill">
+                    <button type="submit" name="add_to_cart" class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-3 rounded-pill">
                         ADD TO CART
                     </button>
                 </form>
