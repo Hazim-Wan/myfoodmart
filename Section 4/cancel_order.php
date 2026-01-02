@@ -46,7 +46,7 @@ if (isset($_SESSION['user_id']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     //  FALLBACK REDIRECTION: 
     //  Handles unauthorized access attempts or non-POST requests by routing to home.
      
-    header("Location: " . BASE_URL . "Section 2/index.php");
+    header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 ?>

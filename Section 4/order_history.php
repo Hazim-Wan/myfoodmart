@@ -13,7 +13,7 @@ include_once BASE_PATH . 'db_connect.php';
 //  Ensures only logged-in users can access their transaction history.
 //  Redirects guests to the login module in Section 1 using BASE_URL.
 if (!isset($_SESSION['user_id'])) { 
-    header("Location: " . BASE_URL . "Section 1/login.php"); 
+    header("Location: " . BASE_URL . "../Section 1/login.php"); 
     exit(); 
 }
 

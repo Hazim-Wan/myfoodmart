@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 } else {
     // SECURITY: Prevent direct browser access to this logic-only file.
-    header("Location: " . BASE_URL . "Section 2/index.php");
+    header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 ?>

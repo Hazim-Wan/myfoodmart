@@ -12,13 +12,13 @@ include_once BASE_PATH . 'db_connect.php';
 
 // AUTHENTICATION GUARD: Ensures guests are redirected to login before checkout.
 if (!isset($_SESSION['user_id'])) {
-    header("Location: " . BASE_URL . "Section 1/login.php");
+    header("Location: " . BASE_URL . "../Section 1/login.php");
     exit();
 }
 
 // CART VALIDATION: Prevents access to checkout if the shopping cart session is empty.
 if (empty($_SESSION['cart'])) {
-    header("Location: " . BASE_URL . "Section 2/index.php");
+    header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 

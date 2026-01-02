@@ -11,7 +11,7 @@ include_once BASE_PATH . 'db_connect.php';
 
 // VALIDATION: Ensures a valid Order ID is provided; otherwise, redirects to storefront.
 if (!isset($_GET['id'])) { 
-    header("Location: " . BASE_URL . "Section 2/index.php"); 
+    header("Location: " . BASE_URL . "../Section 2/index.php"); 
     exit(); 
 }
 
