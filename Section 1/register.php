@@ -1,20 +1,41 @@
 <?php
+//  User Registration Module - register.php
+//  Facilitates new user account creation. 
+//  Includes email uniqueness validation and secure database insertion.
+ 
 session_start();
-include 'db_connect.php';
+
+// PATH CONFIGURATION: Accesses the global configuration and path constants.
+include_once __DIR__ . '/../Root/config.php'; 
+
+// DATABASE CONNECTION: Established via the modular connector in the Root folder.
+include_once BASE_PATH . 'db_connect.php'; 
+
 $message = "";
 
+//  FORM PROCESSING LOGIC
+//  Handles the submission of the registration form.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = $_POST['password']; // In a real app, use password_hash()
+    // SECURITY: Sanitize user-provided strings to prevent SQL injection.
+    $name     = mysqli_real_escape_string($conn, $_POST['name']);
+    $email    = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = $_POST['password']; 
 
-    $check = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
-    if (mysqli_num_rows($check) > 0) {
+    // VALIDATION: Check if the provided email address is already registered in the system.
+    $check_query = "SELECT * FROM users WHERE email = '$email'";
+    $check_result = mysqli_query($conn, $check_query);
+
+    if (mysqli_num_rows($check_result) > 0) {
         $message = "Error: Email already exists.";
     } else {
-        $sql = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', 'user')";
+        // DATA INSERTION: Create a new record with the default role 'user'.
+        $sql = "INSERT INTO users (name, email, password, role) 
+                VALUES ('$name', '$email', '$password', 'user')";
+        
         if (mysqli_query($conn, $sql)) {
             $message = "Registration successful! <a href='login.php' class='text-success'>Login here</a>";
+        } else {
+            $message = "Error: System could not process registration.";
         }
     }
 }
@@ -25,16 +46,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Register - MyFoodMart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>style.css">
 </head>
 <body class="bg-light">
-    <?php include 'header.php'; ?>
+    <?php include BASE_PATH . 'header.php'; ?>
 
     <div class="container mt-5">
         <div class="card p-4 mx-auto shadow-sm border-0" style="max-width: 450px; border-top: 5px solid #27ae60 !important;">
             <h2 class="text-center fw-bold mb-4">Create Account</h2>
             
-            <?php if($message) echo "<div class='alert alert-info py-2 small'>$message</div>"; ?>
+            <?php if($message): ?>
+                <div class="alert alert-info py-2 small"><?php echo $message; ?></div>
+            <?php endif; ?>
             
             <form action="register.php" method="POST">
                 <div class="mb-3">
@@ -49,13 +72,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-label fw-bold small">Password</label>
                     <input type="password" name="password" class="form-control border-success" required>
                 </div>
+                
                 <button type="submit" class="btn btn-success w-100 fw-bold py-2 mt-2 shadow-sm">SIGN UP</button>
             </form>
+            
             <p class="mt-4 text-center small text-muted">
                 Already have an account? <a href="login.php" class="text-success fw-bold">Login</a>
             </p>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

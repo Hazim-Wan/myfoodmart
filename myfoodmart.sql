@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<< HEAD
 -- Generation Time: Jan 02, 2026 at 07:14 AM
+=======
+-- Generation Time: Jan 02, 2026 at 02:28 PM
+>>>>>>> 93e604a (Refactor: Modularized code and added clear documentation for rubric compliance)
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,7 +59,7 @@ CREATE TABLE `orders` (
   `total_amount` decimal(10,2) DEFAULT NULL,
   `shipping_address` text DEFAULT NULL,
   `payment_method` varchar(50) DEFAULT NULL,
-  `order_status` enum('Pending','Preparing','Completed') DEFAULT 'Pending',
+  `order_status` enum('Pending','Preparing','Completed','Cancelled') DEFAULT 'Pending',
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -64,8 +68,37 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `user_id`, `total_amount`, `shipping_address`, `payment_method`, `order_status`, `created_at`) VALUES
+<<<<<<< HEAD
 (1, 1, 34.90, 'Bangunan Hepa', 'Cash on Delivery', 'Pending', '2025-12-20 20:42:53'),
 (2, 2, 14.50, 'Bangunan HEPA UNIMAS', 'Cash on Delivery', 'Pending', '2026-01-01 18:59:22');
+=======
+(4, 1, 16.50, 'Kolej Cempaka', 'Online Banking', 'Pending', '2026-01-02 17:30:51'),
+(5, 2, 35.70, 'Kolej Rafflesia', 'S Pay Global', 'Pending', '2026-01-02 17:31:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `item_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`item_id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
+(1, 4, 2, 2, 6.00),
+(2, 4, 4, 1, 4.50),
+(3, 5, 8, 1, 13.90),
+(4, 5, 9, 2, 10.90);
+>>>>>>> 93e604a (Refactor: Modularized code and added clear documentation for rubric compliance)
 
 -- --------------------------------------------------------
 
@@ -141,6 +174,14 @@ ALTER TABLE `orders`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`item_id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -168,7 +209,17 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
+<<<<<<< HEAD
   MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+=======
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+>>>>>>> 93e604a (Refactor: Modularized code and added clear documentation for rubric compliance)
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -191,6 +242,13 @@ ALTER TABLE `users`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 --
 -- Constraints for table `products`
