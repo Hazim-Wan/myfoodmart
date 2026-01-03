@@ -97,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label class="form-label fw-bold">Payment Method</label>
                             <select name="payment" class="form-select border-success rounded-3" required>
                                 <option value="Cash on Delivery">Cash on Delivery</option>
+                                <option value="S Pay Global">S Pay Global</option>
                                 <option value="Online Banking">Online Banking</option>
                             </select>
                         </div>
