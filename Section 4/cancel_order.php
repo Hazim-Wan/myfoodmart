@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['user_id'];
     $order_id = mysqli_real_escape_string($conn, $_POST['order_id']);
     
-    
+
     //  CONDITIONAL UPDATE QUERY:
     //  1. Updates order_status to 'Cancelled'.
     //  2. SECURITY: Filters by user_id to prevent unauthorized cross-user cancellations.
