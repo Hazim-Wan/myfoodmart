@@ -1,7 +1,7 @@
 <?php
-//  Administrative Product Dashboard - admin_dashboard.php
-//  Provides a centralized interface for managing the food catalog.
-//  Supports CRUD operations (Create, Read, Update, Delete) for products.
+// Administrative Product Dashboard - admin_dashboard.php
+// Provides a centralized interface for managing the food catalog.
+// Supports CRUD operations (Create, Read, Update, Delete) for products.
 
 session_start();
 
@@ -9,17 +9,17 @@ session_start();
 include_once __DIR__ . '/../Root/config.php'; 
 include_once BASE_PATH . 'db_connect.php'; 
 
-//  AUTHENTICATION GUARD:
-//  Restricts access solely to administrators. Unauthorized users are 
-//  rerouted to the storefront home page.
+// AUTHENTICATION GUARD:
+// Restricts access solely to administrators. Unauthorized users are 
+// rerouted to the storefront home page.
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 
-//  DELETION LOGIC:
-//  Processes GET requests to remove products from the inventory.
-//  SECURITY: Sanitizes the ID parameter to prevent SQL Injection.
+// DELETION LOGIC:
+// Processes GET requests to remove products from the inventory.
+// SECURITY: Sanitizes the ID parameter to prevent SQL Injection.
 if (isset($_GET['delete'])) {
     $id = mysqli_real_escape_string($conn, $_GET['delete']);
     $delete_query = "DELETE FROM products WHERE product_id = '$id'";
@@ -30,8 +30,8 @@ if (isset($_GET['delete'])) {
     }
 }
 
-//  DATA RETRIEVAL:
-//  Fetches all products joined with their category names for better display.
+// DATA RETRIEVAL:
+// Fetches all products joined with their category names for better display.
 $query = "SELECT p.*, c.name as cat_name 
           FROM products p 
           JOIN categories c ON p.category_id = c.category_id 
@@ -54,9 +54,14 @@ $result = mysqli_query($conn, $query);
             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                 <h2 class="fw-bold text-dark mb-0">📦 Product Management</h2>
                 <div class="d-flex gap-2">
+                    <a href="admin_categories.php" class="btn btn-outline-dark fw-bold rounded-pill px-4">📁 Manage Categories</a>
                     <a href="add_product.php" class="btn btn-success fw-bold rounded-pill px-4 shadow-sm">+ Add New Product</a>
                 </div>
             </div>
+
+            <?php if(isset($_GET['msg']) && $_GET['msg'] == 'deleted'): ?>
+                <div class="alert alert-success py-2 small">Product removed successfully.</div>
+            <?php endif; ?>
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle">

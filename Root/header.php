@@ -1,11 +1,10 @@
 <?php
-//  Global Header Component - Root/header.php
-//  Provides the primary navigation bar across all project sections.
-//  Implements role-based access control for administrative links and 
-//  dynamic session-based shopping cart counters.
+// Global Header Component - Root/header.php
+// Provides the primary navigation bar across all project sections.
+// Implements role-based access control for administrative links and 
+// dynamic session-based shopping cart counters.
 
 // PATH CONFIGURATION: Ensures the global BASE_URL is available for all navigation links.
-// header.php and config.php are in the same directory (Root).
 include_once __DIR__ . '/config.php'; 
 ?>
 
@@ -41,7 +40,7 @@ include_once __DIR__ . '/config.php';
                     <?php if($_SESSION['role'] == 'admin'): ?>
                         <li class="nav-item">
                             <a class="btn btn-warning btn-sm fw-bold me-2" href="<?php echo BASE_URL; ?>../Section 5/admin_dashboard.php">
-                                ⚙️ Products
+                                ⚙️ Inventory
                             </a>
                         </li>
                         <li class="nav-item">
