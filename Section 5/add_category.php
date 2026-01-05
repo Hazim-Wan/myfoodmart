@@ -1,53 +1,38 @@
 <?php
-//  Administrative Category Editor - edit_category.php
-//  Enables administrators to modify existing food category details.
-//  Ensures database consistency and implements role-based access control.
+//  Administrative Category Creator - add_category.php
+//  Enables administrators to expand the food catalog by adding new categories.
+//  Implements data sanitization and modular pathing for system reliability.
 
 session_start();
 
-// PATH CONFIGURATION
+// PATH CONFIGURATION: Navigates to the Root directory for core configuration.
 include_once __DIR__ . '/../Root/config.php'; 
 include_once BASE_PATH . 'db_connect.php'; 
 
-// AUTHENTICATION GUARD
+// AUTHENTICATION GUARD: Restricts access solely to administrators.
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 
 $error = "";
-$category = null;
 
-// DATA RETRIEVAL: Fetch the current category data based on the ID in the URL.
-if (isset($_GET['id'])) {
-    $id = mysqli_real_escape_string($conn, $_GET['id']);
-    $res = mysqli_query($conn, "SELECT * FROM categories WHERE category_id = '$id'");
-    $category = mysqli_fetch_assoc($res);
-
-    if (!$category) {
-        header("Location: admin_categories.php");
-        exit();
-    }
-} else {
-    header("Location: admin_categories.php");
-    exit();
-}
-
-// UPDATE LOGIC: Processes the form submission to save changes.
+// CATEGORY PROCESSING LOGIC: Executes when the administrator submits the form.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // SECURITY: Sanitize inputs to prevent SQL Injection vulnerabilities.
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $cat_id = mysqli_real_escape_string($conn, $_POST['category_id']);
 
-    $update_query = "UPDATE categories 
-                     SET name = '$name', description = '$description' 
-                     WHERE category_id = '$cat_id'";
+    // DATABASE INSERTION: Creates a new record in the categories table.
+    $query = "INSERT INTO categories (name, description, created_at) 
+              VALUES ('$name', '$description', NOW())";
 
-    if (mysqli_query($conn, $update_query)) {
-        header("Location: admin_categories.php?msg=updated");
+    if (mysqli_query($conn, $query)) {
+        // SUCCESS: Redirects back to the Category Management list.
+        header("Location: admin_categories.php?msg=added");
         exit();
     } else {
-        $error = "Database Error: Could not update category.";
+        $error = "Database Error: Could not add category.";
     }
 }
 ?>
@@ -55,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Category - MyFoodMart Admin</title>
+    <title>Add Category - MyFoodMart Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>style.css">
 </head>
@@ -71,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="card p-4 mx-auto shadow-sm border-0 rounded-4" style="max-width: 600px;">
             <div class="text-center mb-4">
-                <h2 class="fw-bold text-dark">✏️ Edit Category</h2>
-                <p class="text-muted">Modify the details for category #<?php echo $category['category_id']; ?></p>
+                <h2 class="fw-bold text-dark">➕ Add New Category</h2>
+                <p class="text-muted">Create a new group for your food products.</p>
             </div>
 
             <?php if($error): ?>
@@ -80,21 +65,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
 
             <form method="POST">
-                <input type="hidden" name="category_id" value="<?php echo $category['category_id']; ?>">
                 <div class="mb-3">
                     <label class="form-label fw-bold small">Category Name</label>
                     <input type="text" name="name" class="form-control border-primary" 
-                           value="<?php echo htmlspecialchars($category['name']); ?>" required>
+                           placeholder="e.g., Traditional Desserts" required>
                 </div>
                 
                 <div class="mb-4">
                     <label class="form-label fw-bold small">Description</label>
                     <textarea name="description" class="form-control border-primary" rows="3" 
-                              required><?php echo htmlspecialchars($category['description']); ?></textarea>
+                              placeholder="Briefly describe what this category includes..." required></textarea>
                 </div>
                 
                 <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm rounded-pill">
-                    UPDATE CATEGORY
+                    SAVE CATEGORY
                 </button>
             </form>
         </div>
