@@ -1,8 +1,8 @@
 <?php
-//  Administrative Product Creation Module - add_product.php
-//  Facilitates the addition of new food items to the database.
-//  Handles secure file uploads for images and maintains data integrity 
-//  through input sanitization.
+// Administrative Product Creation Module - add_product.php
+// Facilitates the addition of new food items to the database.
+// Handles secure file uploads for images and maintains data integrity 
+// through input sanitization and standardized pathing.
 
 session_start();
 
@@ -10,51 +10,53 @@ session_start();
 include_once __DIR__ . '/../Root/config.php'; 
 include_once BASE_PATH . 'db_connect.php'; 
 
-
-//  SECURITY GUARD:
-//  Restricts access solely to users with the 'admin' role. 
-//  Redirects unauthorized users back to the storefront.
+// SECURITY GUARD:
+// Restricts access solely to users with the 'admin' role. 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: " . BASE_URL . "../Section 2/index.php");
     exit();
 }
 
-//  FORM PROCESSING LOGIC:
-//  Handles the POST request for new product details and file uploads.
+// FORM PROCESSING LOGIC:
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // DATA CAPTURE: Sanitize text inputs to prevent SQL injection.
+    // DATA CAPTURE: Sanitize text inputs.
     $name     = mysqli_real_escape_string($conn, $_POST['name']);
     $desc     = mysqli_real_escape_string($conn, $_POST['description']);
     $price    = mysqli_real_escape_string($conn, $_POST['price']);
     $category = mysqli_real_escape_string($conn, $_POST['category_id']);
     
+    // FILE UPLOAD HANDLING:
+    // 1. Uses BASE_PATH to ensure images land in the shared 'Root/images' folder.
+    // 2. This ensures the homepage (index.php) can find the file.
+    $target_dir = BASE_PATH . "images/";
     
-    //  FILE UPLOAD HANDLING:
-    //  1. Defines the target directory within the Root folder.
-    //  2. Generates a unique filename using time() to prevent overwriting existing files.
-    //  3. Moves the uploaded file from temporary storage to the permanent images folder.
-    $target_dir = dirname(__DIR__) . "/images/";
     if (!is_dir($target_dir)) { 
         mkdir($target_dir, 0777, true); 
     }
     
-    $file_name       = time() . "_" . basename($_FILES["image"]["name"]);
-    $relative_path   = "images/" . $file_name; // Store this path in the database.
+    // Generate a unique name to prevent overwriting files with the same name.
+    $file_ext        = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
+    $file_name       = time() . "_" . uniqid() . "." . $file_ext;
+    
+    // Path for database: relative to the Root.
+    $relative_path   = "images/" . $file_name; 
+    
+    // Path for moving the file: absolute server path.
     $absolute_target = $target_dir . $file_name;
 
     if (move_uploaded_file($_FILES["image"]["tmp_name"], $absolute_target)) {
         
-        //  DATABASE INSERTION:
-        //  Commits the new product record to the 'products' table.
-        //  Default status is set to 1 (active).
+        // DATABASE INSERTION:
+        // Stores the $relative_path so the homepage can append it to BASE_URL.
         $sql = "INSERT INTO products (name, description, price, category_id, image_url, is_active) 
                 VALUES ('$name', '$desc', '$price', '$category', '$relative_path', 1)";
         
         if (mysqli_query($conn, $sql)) {
-            // REDIRECTION: Route back to dashboard with success status.
             header("Location: admin_dashboard.php?success=1");
             exit();
         }
+    } else {
+        $error = "File upload failed. Check folder permissions.";
     }
 }
 ?>
@@ -70,20 +72,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include BASE_PATH . 'header.php'; ?>
 
     <div class="container mt-5">
+        <div class="mb-4">
+            <a href="admin_dashboard.php" class="btn btn-sm btn-outline-secondary px-3 rounded-pill fw-bold">
+                ← Back to Dashboard
+            </a>
+        </div>
+
         <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px; border-radius: 15px;">
-            <div class="card-header bg-dark text-white fw-bold py-3">➕ Add New Meal</div>
+            <div class="card-header bg-dark text-white fw-bold py-3 text-center">➕ Add New Meal</div>
             <div class="card-body p-4">
+                <?php if(isset($error)): ?>
+                    <div class="alert alert-danger py-2 small"><?php echo $error; ?></div>
+                <?php endif; ?>
+
                 <form action="add_product.php" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Food Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="e.g. Laksa Sarawak" required>
+                        <input type="text" name="name" class="form-control border-success" placeholder="e.g. Laksa Sarawak" required>
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label fw-bold">Category</label>
-                        <select name="category_id" class="form-select" required>
+                        <select name="category_id" class="form-select border-success" required>
                             <?php 
-                            // DYNAMIC CATEGORY LOADING: Fetches available food categories from DB.
                             $cats = mysqli_query($conn, "SELECT * FROM categories");
                             while($c = mysqli_fetch_assoc($cats)) {
                                 echo "<option value='".$c['category_id']."'>".$c['name']."</option>";
@@ -94,21 +105,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Price (RM)</label>
-                        <input type="number" step="0.01" name="price" class="form-control" placeholder="0.00" required>
+                        <input type="number" step="0.01" name="price" class="form-control border-success" placeholder="0.00" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Description</label>
-                        <textarea name="description" class="form-control" rows="3" placeholder="Describe the ingredients or taste..." required></textarea>
+                        <textarea name="description" class="form-control border-success" rows="3" placeholder="Describe the ingredients..." required></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Product Image</label>
-                        <input type="file" name="image" class="form-control" accept="image/*" required>
+                        <input type="file" name="image" class="form-control border-success" accept="image/*" required>
+                        <div class="form-text text-muted">Image will be saved to Root/images/ automatically.</div>
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm">UPLOAD TO MENU</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm rounded-pill">
+                            UPLOAD TO MENU
+                        </button>
                     </div>
                 </form>
             </div>
